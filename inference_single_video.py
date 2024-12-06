@@ -89,9 +89,20 @@ def main():
 
         frame_name = os.path.splitext(os.path.split(img_paths[-1])[-1])[0]
         Imgs = Imgs.unsqueeze(0).to(device)
-        output, _, _ , _, _, = visual_enhance_model(Imgs)
-        output = tensor2img(output)
-        cv2.imwrite(os.path.join(args.save_path, '{}_DVD.png'.format(frame_name)), output)
+        with torch.no_grad():
+            output, _, _ , _, _, = visual_enhance_model(Imgs)
+
+        input_img = cv2.imread(img_paths[1])
+        output_img = (output.cpu().squeeze().permute(1, 2, 0).numpy() * 255).clip(0, 255).astype(np.uint8)[..., ::-1]
+        output_img = cv2.resize(output_img, input_img.shape[:2][::-1])
+        cv2.imshow("input_img", input_img)
+        cv2.imshow("output", output_img)
+        key = cv2.waitKey(1)
+        if key & 255 == 27:
+            break
+
+        # output = tensor2img(output)
+        # cv2.imwrite(os.path.join(args.save_path, '{}_DVD.png'.format(frame_name)), output)
 
         pbar.update(1)
     pbar.close()

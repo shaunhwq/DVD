@@ -1,3 +1,18 @@
+# Notes
+
+Appears to have some problems running on CPU
+
+Installation for inference
+```
+conda create -n DVD python=3.9
+conda install pytorch==1.11.0 torchvision==0.12.0 torchaudio==0.11.0 cudatoolkit=11.3 -c pytorch
+conda install -c conda-forge cudatoolkit-dev=11.3 -y
+pip3 install numpy==1.24
+pip3 install opencv-python wandb tqdm timm tensorboard
+cd ops/DCNv2
+python3 setup.py build develop
+```
+
 # DVD: Driving-Video Dehazing with Non-Aligned Regularization for Safety Assistance (CVPR 2024)
 
 [Junkai Fan](https://fanjunkai1.github.io/),

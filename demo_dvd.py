@@ -87,7 +87,7 @@ if __name__ == "__main__":
         with_tsa=True,
         spynet_path=flow_model_path,
     )
-    weights = torch.load(model_weights_path, map_location="cpu", weights_only=True)
+    weights = torch.load(model_weights_path, map_location="cpu")
     model.load_state_dict(weights["params"])
     model.to(device)
     model.eval()
@@ -98,7 +98,7 @@ if __name__ == "__main__":
         output_nc=3,
         norm_layer=nn.InstanceNorm2d,
     )
-    si_dehaze_weights = torch.load(si_dehaze_weights_path, map_location="cpu", weights_only=True)
+    si_dehaze_weights = torch.load(si_dehaze_weights_path, map_location="cpu")
     si_dehaze_model.load_state_dict(si_dehaze_weights)
     si_dehaze_model.to(device)
     si_dehaze_model.eval()
