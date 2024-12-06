@@ -65,7 +65,7 @@ class SpyNet(nn.Module):
             #     os.makedirs(os.path.dirname(load_path), exist_ok=True)
             #     open(load_path, 'wb').write(r.content)
 
-            self.load_state_dict(torch.load(load_path, map_location=lambda storage, loc: storage)['params'])
+            self.load_state_dict(torch.load(load_path, map_location=lambda storage, loc: storage, weights_only=True)['params'])
 
         self.register_buffer('mean', torch.Tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1))
         self.register_buffer('std', torch.Tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1))
@@ -366,7 +366,9 @@ class NSDNGAN(nn.Module):
                  num_reconstruct_block=10,
                  center_frame_idx=None,
                  hr_in=False,
-                 with_tsa=True):
+                 with_tsa=True,
+                 spynet_path: str='pretrained/spynet_sintel_final-3d2a1287.pth',
+        ):
         super(NSDNGAN, self).__init__()
 
         if center_frame_idx is None:
@@ -383,7 +385,6 @@ class NSDNGAN(nn.Module):
         # self.flow_model = self.flow_model.module
         # self.flow_model.eval()
 
-        spynet_path='pretrained/spynet_sintel_final-3d2a1287.pth'
         self.spynet = SpyNet(spynet_path, [3, 4, 5])
 
         # extract features for each frame
